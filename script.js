@@ -2,14 +2,44 @@
 const API_BASE = "https://omnifix-backend.onrender.com"; // change when deployed
 
 // -------- Demo dataset fallback (kept for offline fallback) ----------
+// -------- Demo dataset fallback (kept for offline fallback) ----------
 let SERVICES = [
-  { id:1, title:"Home Cleaning", price:799, rating:4.7, short:"Deep cleaning for 1-3 BHK, includes sanitization", category:"cleaning", icon:"🧹", color:"#f97316", desc:"Our cleaning package covers sweeping, mopping, dusting, bathrooms and kitchen sanitization. Supplies included." },
-  { id:2, title:"AC Service", price:899, rating:4.6, short:"AC cleaning & gas check - split & window units", category:"ac", icon:"❄️", color:"#06b6d4", desc:"Full AC service includes filter clean, coil check and gas top-up if required." },
-  { id:3, title:"Plumbing", price:499, rating:4.5, short:"Leak repairs, pipe replacements & fittings", category:"plumbing", icon:"🔧", color:"#0ea5a4", desc:"From leak fixes to pipe replacement and bathroom fitting installations." },
-  { id:4, title:"Electrician", price:399, rating:4.4, short:"Wiring, switchboards, fittings & lights", category:"electrical", icon:"💡", color:"#f59e0b", desc:"All home electrical services including wiring, switches, and lighting installation." },
-  { id:5, title:"Carpentry", price:599, rating:4.3, short:"Minor carpentry, shelves & door fixes", category:"carpentry", icon:"🪚", color:"#7c3aed", desc:"Skilled carpenters for fittings, shelves, furniture repair and custom work." },
-  { id:6, title:"Pest Control", price:999, rating:4.8, short:"Home pest control — one-time & packs", category:"pest", icon:"🪳", color:"#ef4444", desc:"Safe pest control for home, including roach, termite and rodent plans." }
+  { id:1, title:"Home Cleaning (1 BHK)", price:699, rating:4.7, short:"Basic deep clean for 1 BHK", category:"cleaning", icon:"🧹", color:"#f97316", desc:"Vacuuming, mopping, dusting, bathroom & kitchen sanitization. Supplies included." },
+  { id:2, title:"Home Cleaning (2 BHK)", price:1099, rating:4.8, short:"Deep clean for 2 BHK", category:"cleaning", icon:"🧼", color:"#f59e0b", desc:"Complete cleaning of 2 BHK, includes sanitization, dust removal and floor care." },
+  { id:3, title:"Home Cleaning (3 BHK+)", price:1499, rating:4.8, short:"Deep clean for 3 BHK and above", category:"cleaning", icon:"🧽", color:"#fb923c", desc:"Full house deep-cleaning, sanitization and stain removal. Ideal for move-in/out." },
+
+  { id:4, title:"AC Service (Split/Window)", price:899, rating:4.6, short:"Cleaning, coil check & gas top-up", category:"ac", icon:"❄️", color:"#06b6d4", desc:"Filter clean, coil cleaning, gas top-up (if needed) and performance check." },
+  { id:5, title:"AC Installation", price:1499, rating:4.5, short:"Install indoor + outdoor units", category:"ac", icon:"🧰", color:"#60a5fa", desc:"Professional mounting, bracket fix, copper line & vacuuming. Includes testing." },
+
+  { id:6, title:"Electrician - Basic", price:399, rating:4.4, short:"Switch/plug/fan fixes", category:"electrical", icon:"💡", color:"#f59e0b", desc:"Wiring fixes, switchboard repair, light and fan installation." },
+  { id:7, title:"Electrician - Full Wiring", price:2499, rating:4.5, short:"Partial/full house rewiring", category:"electrical", icon:"⚡", color:"#f97316", desc:"Professional rewiring, MCB installation and safety checks with warranty." },
+
+  { id:8, title:"Plumbing - Leak Fix", price:499, rating:4.5, short:"Leak repairs & pipe fix", category:"plumbing", icon:"🔧", color:"#0ea5a4", desc:"Fix leaking taps, joints, pipe replacement and minor bathroom repairs." },
+  { id:9, title:"Plumbing - Installations", price:899, rating:4.5, short:"Fitting, cisterns and faucets", category:"plumbing", icon:"🚿", color:"#0284c7", desc:"Washbasin, shower, cistern installation, faucet change and fittings." },
+
+  { id:10, title:"Carpentry - Minor", price:599, rating:4.3, short:"Shelves, hinges & small fixes", category:"carpentry", icon:"🪚", color:"#7c3aed", desc:"Minor carpentry: shelf mounting, hinge replacement and small furniture repair." },
+  { id:11, title:"Carpentry - Custom", price:2499, rating:4.6, short:"Custom cabinets & wardrobes", category:"carpentry", icon:"🛠️", color:"#6d28d9", desc:"Custom furniture, wardrobes, shelving and finish work by skilled carpenters." },
+
+  { id:12, title:"Pest Control - Basic", price:899, rating:4.7, short:"Cockroach & general pests", category:"pest", icon:"🪳", color:"#ef4444", desc:"One-time home pest control for roaches and common pests with safe chemicals." },
+  { id:13, title:"Pest Control - Termite", price:2999, rating:4.8, short:"Termite treatment & inspection", category:"pest", icon:"🐜", color:"#dc2626", desc:"Termite inspection and chemical treatment with warranty options." },
+
+  { id:14, title:"Appliance Repair - Refrigerator", price:999, rating:4.6, short:"Fridge repair & gas top-up", category:"appliance", icon:"🧊", color:"#06b6d4", desc:"Compressor check, gas top-up, cooling issues and part replacement." },
+  { id:15, title:"Appliance Repair - Washing Machine", price:799, rating:4.5, short:"Service & repair (front/top)", category:"appliance", icon:"🧺", color:"#7dd3fc", desc:"Drum check, motor, water inlet and electronic fault repairs." },
+  { id:16, title:"Appliance Repair - Microwave/OTG", price:499, rating:4.4, short:"Heating & power faults", category:"appliance", icon:"🍳", color:"#f4b4c0", desc:"Heating element change, plate repairs and electronic diagnostics." },
+
+  { id:17, title:"Sofa/Carpet Cleaning", price:1299, rating:4.7, short:"Deep sofa & carpet shampoo", category:"cleaning", icon:"🛋️", color:"#f472b6", desc:"Hot-water extraction, deep shampooing and stain removal for upholstery." },
+  { id:18, title:"Chimney Cleaning & Repair", price:699, rating:4.5, short:"Chimney oil/grease cleaning", category:"cleaning", icon:"🔥", color:"#fb7185", desc:"Degreasing, filter change and motor check for kitchen chimneys." },
+
+  { id:19, title:"Water Purifier Service", price:499, rating:4.6, short:"RO/UV filter replacement & check", category:"plumbing", icon:"💧", color:"#0ea5a4", desc:"Filter change, membrane check, sanitizer flush for RO/UV systems." },
+  { id:20, title:"TV/Audio Mounting", price:699, rating:4.5, short:"TV wall mount and setup", category:"electrical", icon:"📺", color:"#60a5fa", desc:"Wall mounting, cable hiding, audio system setup and testing." },
+
+  { id:21, title:"Home Painting - Single Room", price:3999, rating:4.6, short:"Interior painting for 1 room", category:"painting", icon:"🎨", color:"#f97316", desc:"Surface prep, primer and two coats of premium paint; touchups included." },
+  { id:22, title:"Home Painting - Full Home", price:14999, rating:4.7, short:"Full house interior painting", category:"painting", icon:"🖌️", color:"#fb923c", desc:"Complete home repaint with color consult, primer & high-quality paints." },
+
+  { id:23, title:"Home Shifting - Packing", price:2499, rating:4.4, short:"Local packing & loading", category:"moving", icon:"📦", color:"#94a3b8", desc:"Packing, loading and short-distance shifting with insurance options." },
+  { id:24, title:"Gardening & Lawn Care", price:899, rating:4.5, short:"Pruning, mowing & weeding", category:"garden", icon:"🌿", color:"#10b981", desc:"Lawn mowing, plant pruning, fertilizing and garden maintenance." }
 ];
+
 
 // -------- DOM refs ----------
 const servicesGrid = document.getElementById('services-grid');
