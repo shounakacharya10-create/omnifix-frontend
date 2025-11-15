@@ -1,5 +1,5 @@
 // -------- Config & API base ----------
-const API_BASE = "http://localhost:5000"; // change when deployed
+const API_BASE = "https://omnifix-backend.onrender.com"; // change when deployed
 
 // -------- Demo dataset fallback (kept for offline fallback) ----------
 let SERVICES = [
