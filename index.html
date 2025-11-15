@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Omnifix — Trusted Home Services</title>
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- Option B: Rounded-square icon + wordmark (inline SVG) -->
+      <a class="brand" href="#" aria-label="Omnifix home">
+        <svg width="140" height="44" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="omnifixTitleB" class="logo-svg-inline">
+          <title id="omnifixTitleB">Omnifix — Trusted home services</title>
+          <defs>
+            <linearGradient id="omniGradB" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#06b6d4"/>
+              <stop offset="1" stop-color="#6d28d9"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Icon -->
+          <g transform="translate(12,8)">
+            <rect x="0" y="0" width="56" height="56" rx="12" fill="url(#omniGradB)"/>
+            <!-- small house + wrench mark -->
+            <path d="M14 30 L28 18 L42 30 V40 H32 V34 H24 V40 H14 Z" fill="white" opacity="0.96"/>
+          </g>
+
+          <!-- Wordmark -->
+          <g transform="translate(90,50)" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial" style="dominant-baseline:middle">
+            <text x="0" y="0" font-size="28" font-weight="700" fill="#0f172a">Omnifix</text>
+            <text x="0" y="22" font-size="12" fill="#6b7280">Trusted home services</text>
+          </g>
+        </svg>
+
+        <div class="brand-text" style="margin-left:8px">
+          <div class="logo-title">Omnifix</div>
+          <div class="logo-sub">Trusted home services</div>
+        </div>
+      </a>
+
+      <nav id="main-nav" class="nav">
+        <a href="#services">Services</a>
+        <a href="#how">How it works</a>
+        <a href="#providers">Providers</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Login/Register or user pill inserted dynamically -->
+        <button id="book-now" class="btn btn-primary">Book Now</button>
+        <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <h1>Trusted professionals for every home need</h1>
+          <p class="hero-sub">Book verified technicians for cleaning, repairs, installations and more. Transparent pricing, on-demand or scheduled.</p>
+
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#services">Explore Services</a>
+            <a class="btn btn-ghost" href="#providers">For Providers</a>
+          </div>
+
+          <ul class="highlights">
+            <li><strong>300+</strong> Services</li>
+            <li><strong>5k+</strong> Bookings</li>
+            <li><strong>4.7</strong> Avg rating</li>
+            <li><strong>50+</strong> Cities</li>
+          </ul>
+        </div>
+
+        <div class="hero-right">
+          <div class="card hero-card">
+            <div class="hero-card-left">
+              <div class="hero-icon" aria-hidden="true">🔧</div>
+            </div>
+            <div class="hero-card-body">
+              <div class="hcb-title">Reliable technicians — on time</div>
+              <div class="hcb-sub">Trusted pros, transparent pricing and easy bookings.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="container services-section">
+      <div class="service-controls">
+        <div class="search">
+          <input id="search-input" type="search" placeholder="Search services (e.g. plumber, AC)" />
+        </div>
+
+        <div class="filters">
+          <select id="category-select" aria-label="Filter by category">
+            <option value="">All categories</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="ac">AC</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="electrical">Electrical</option>
+            <option value="carpentry">Carpentry</option>
+            <option value="pest">Pest Control</option>
+          </select>
+
+          <label class="price-filter">
+            <span>Max price</span>
+            <input id="price-range" type="range" min="100" max="2000" step="50" value="1500" />
+            <span id="price-value">₹1500</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2>Popular Services</h2>
+        <div class="subtitle" id="results-count">Showing 0 results</div>
+      </div>
+
+      <div id="services-grid" class="grid"></div>
+    </section>
+
+    <section id="how" class="container how-section">
+      <h3>How it works</h3>
+      <ol>
+        <li>Choose a service</li>
+        <li>Pick date & time</li>
+        <li>Confirm booking — technician arrives</li>
+      </ol>
+    </section>
+
+    <section id="providers" class="container providers-section">
+      <h3>For Providers</h3>
+      <p>Join our network of verified professionals — grow your business.</p>
+    </section>
+
+    <!-- My Bookings section (hidden by default) -->
+    <section id="my-bookings-section" class="container my-bookings-section hidden" aria-hidden="true">
+      <div class="section-header">
+        <h2>My Bookings</h2>
+        <div class="subtitle">Your upcoming and past bookings</div>
+      </div>
+
+      <div id="my-bookings-list" class="bookings-list">
+        <!-- bookings will be injected here -->
+      </div>
+
+      <div id="no-bookings" class="muted hidden" style="margin-top:12px">
+        You don't have any bookings yet. Book a service to get started.
+      </div>
+
+      <div style="margin-top:18px">
+        <button id="bookings-close" class="btn btn-ghost">Close</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© <span id="year"></span> Omnifix</div>
+      <div class="footer-links">
+        <a>Privacy</a><a>Terms</a><a>Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Details drawer -->
+  <aside id="details-drawer" class="drawer" aria-hidden="true" aria-labelledby="drawer-title">
+    <div class="drawer-inner">
+      <button id="drawer-close" class="drawer-close" aria-label="Close details">✕</button>
+      <h3 id="drawer-title">Service details</h3>
+      <div id="drawer-body" class="drawer-body"></div>
+      <div class="drawer-actions">
+        <button id="drawer-book" class="btn btn-primary">Book this service</button>
+        <button id="drawer-fav" class="btn btn-ghost">Save</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Booking Modal (centered) -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      <h4 id="modal-title">Book Service</h4>
+      <p id="modal-desc" class="muted"></p>
+
+      <form id="booking-form">
+        <input type="text" id="customer-name" placeholder="Your name" required />
+        <input type="tel" id="customer-phone" placeholder="Phone" required />
+        <input type="date" id="booking-date" required />
+        <div class="modal-actions">
+          <button type="button" class="btn" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm booking</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Auth Modal (register + login) -->
+  <div id="auth-modal" class="modal" aria-hidden="true">
+    <div class="modal-content auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <button class="modal-close" id="auth-close" aria-label="Close auth">✕</button>
+
+      <!-- REGISTER VIEW (default visible when opened in register mode) -->
+      <div id="register-view" class="auth-view">
+        <h2 id="auth-title" class="auth-title">Create your account</h2>
+        <p class="auth-sub">Welcome! Please fill in the details to get started.</p>
+
+        <form id="register-form" class="auth-form">
+          <label class="field-label">Full name</label>
+          <input type="text" id="reg-name" placeholder="Enter your full name" required />
+
+          <label class="field-label">Email address</label>
+          <input type="email" id="reg-email" placeholder="Enter your email address" required />
+
+          <label class="field-label">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="reg-password" placeholder="Enter your password" required minlength="6" />
+            <button type="button" class="pw-toggle" aria-label="Show password" id="reg-pw-toggle">👁️</button>
+          </div>
+
+          <button type="submit" class="auth-cta">Continue ▸</button>
+        </form>
+
+        <div class="auth-footer">
+          <div class="muted small">Already have an account? <button id="switch-to-login" class="linkish">Sign in</button></div>
+        </div>
+
+        <div class="auth-secure muted small" style="margin-top:10px; text-align:center;">Secured locally — demo mode</div>
+      </div>
+
+      <!-- LOGIN VIEW (hidden by default) -->
+      <div id="login-view" class="auth-view hidden">
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-sub">Sign in to access your bookings and faster checkout.</p>
+
+        <form id="login-form" class="auth-form">
+          <label class="field-label">Email address</label>
+          <input type="email" id="login-email" placeholder="Enter your email address" required />
+
+          <label class="field-label">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="login-password" placeholder="Enter your password" required />
+            <button type="button" class="pw-toggle" aria-label="Show password" id="login-pw-toggle">👁️</button>
+          </div>
+
+          <button type="submit" class="auth-cta">Continue ▸</button>
+        </form>
+
+        <div class="auth-footer">
+          <div class="muted small">Don't have an account? <button id="switch-to-register" class="linkish">Create one</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" aria-hidden="true"></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
