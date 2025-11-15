@@ -6,63 +6,128 @@
   <title>Service — Omnifix</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Minimal inline styles so the error/back UI looks okay */
+    .container { max-width:900px; margin:36px auto; padding:0 16px; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial; color:#0f172a; }
+    .muted { color:#6b7280; }
+    .center { text-align:center; }
+    .card { background:#fff; border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(15,23,42,0.06); }
+    .btn { display:inline-block; padding:10px 14px; border-radius:10px; text-decoration:none; border:1px solid #e6e9ee; background:#fff; color:#6d28d9; cursor:pointer; }
+    .btn-primary { background:#6d28d9; color:#fff; border:none; }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">Omnifix</a>
-    </div>
+  <header style="padding:12px 0;border-bottom:1px solid #eef2ff">
+    <div class="container"><a href="index.html" style="color:#6d28d9;text-decoration:none;font-weight:700">Omnifix</a></div>
   </header>
 
-  <main class="container" style="padding:36px 20px">
-    <div id="service-detail"></div>
-    <div style="margin-top:20px">
-      <a href="index.html" class="btn btn-ghost">Back to Services</a>
-    </div>
+  <main class="container">
+    <div id="content" style="margin-top:18px"></div>
+    <div id="fallback" class="center" style="margin-top:18px"></div>
   </main>
 
   <script>
-    const API_BASE = "https://omnifix-backend.onrender.com"; // replace if different
-    const params = new URLSearchParams(location.search);
-    const id = params.get('id');
+    // ===== CONFIG =====
+    // IMPORTANT: set to your deployed backend URL (Render) if different
+    const API_BASE = "https://omnifix-backend.onrender.com";
 
-    async function load() {
-      if(!id){
-        document.getElementById('service-detail').innerText = 'No service specified';
-        return;
-      }
+    // ===== UTIL =====
+    function el(tag, attrs={}, html=''){ const node = document.createElement(tag); Object.entries(attrs).forEach(([k,v])=> node.setAttribute(k,v)); if(html) node.innerHTML = html; return node; }
+    function showError(message){
+      const c = document.getElementById('content');
+      c.innerHTML = '';
+      const box = el('div',{class:'card'}, `<h3 style="margin:0 0 8px">Failed to load service</h3><div class="muted">${message}</div>`);
+      c.appendChild(box);
+      const fb = document.getElementById('fallback');
+      fb.innerHTML = `<div style="margin-top:14px"><a href="index.html" class="btn">Back to Services</a></div>`;
+    }
+
+    // ===== fetch helpers =====
+    async function fetchJson(url){
       try {
-        const res = await fetch(API_BASE + '/api/services/' + id);
-        const s = await res.json();
-        if(!s || !s.title) {
-          document.getElementById('service-detail').innerText = 'Service not found';
-          return;
-        }
-        document.getElementById('service-detail').innerHTML = `
-          <div class="card-service" style="padding:20px">
-            <div style="display:flex;gap:18px;align-items:center">
-              <div style="width:96px;height:96px;border-radius:14px;background:${s.color||'#7c3aed'};display:flex;align-items:center;justify-content:center;font-size:48px">${s.icon||'🔧'}</div>
-              <div style="flex:1">
-                <h2 style="margin:0 0 6px">${s.title}</h2>
-                <div class="muted">${s.category || ''} • ₹${s.price || ''} • ${s.rating || ''} ★</div>
-                <p style="margin-top:12px">${s.desc || s.short || ''}</p>
-                <div style="margin-top:18px">
-                  <button id="book-now" class="btn btn-primary">Book now</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        document.getElementById('book-now').addEventListener('click', ()=> {
-          // open index.html and open modal — we pass service id in hash to allow opening modal automatically
-          location.href = 'index.html#open-service=' + id;
-        });
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const j = await res.json();
+        return j;
       } catch (err) {
-        console.error(err);
-        document.getElementById('service-detail').innerText = 'Failed to load service';
+        // return null to indicate failure
+        console.warn('fetchJson failed', url, err);
+        return null;
       }
     }
-    load();
+
+    // ===== main =====
+    (async function(){
+      const params = new URLSearchParams(location.search);
+      const id = params.get('id');
+      const content = document.getElementById('content');
+      if(!id){
+        showError('No service id provided in the URL.');
+        return;
+      }
+
+      // 1) Try the single-service endpoint first: GET /api/services/:id
+      const single = await fetchJson(`${API_BASE}/api/services/${encodeURIComponent(id)}`);
+      if(single && (single._id || single.id || single.title)){
+        renderService(single);
+        return;
+      }
+
+      // 2) Fallback: fetch all services and find by id (handles servers without :id route)
+      const list = await fetchJson(`${API_BASE}/api/services`);
+      if(Array.isArray(list) && list.length>0){
+        // try to find by _id or id or numeric id
+        const found = list.find(s => String(s._id || s.id) === String(id) || String(s.id) === String(id));
+        if(found){
+          renderService(found);
+          return;
+        }
+      }
+
+      // 3) Fallback: if you previously included a local SERVICES array in the frontend,
+      //    you can add it here to search; otherwise show error
+      showError('Service not found on server. It may be a temporary error or the backend lacks the per-service route.');
+    })();
+
+    // ===== render function =====
+    function renderService(s){
+      const content = document.getElementById('content');
+      content.innerHTML = '';
+      // normalize
+      const svc = {
+        id: s._id || s.id,
+        title: s.title || '',
+        price: s.price || '',
+        category: s.category || '',
+        rating: s.rating || '',
+        icon: s.icon || '🔧',
+        color: s.color || '#7c3aed',
+        desc: s.desc || s.short || ''
+      };
+
+      const card = el('div',{class:'card'});
+      card.innerHTML = `
+        <div style="display:flex;gap:18px;align-items:center">
+          <div style="width:96px;height:96px;border-radius:14px;background:${svc.color};display:flex;align-items:center;justify-content:center;font-size:48px">${svc.icon}</div>
+          <div style="flex:1">
+            <h2 style="margin:0 0 6px">${svc.title}</h2>
+            <div class="muted" style="margin-bottom:8px">${svc.category} • ₹${svc.price} • ${svc.rating} ★</div>
+            <p style="margin-top:12px">${svc.desc}</p>
+            <div style="margin-top:18px">
+              <button id="book-now" class="btn btn-primary">Book now</button>
+              <a href="index.html" class="btn" style="margin-left:8px">Back to Services</a>
+            </div>
+          </div>
+        </div>
+      `;
+      content.appendChild(card);
+
+      // On click Book now: redirect back to index with hash that opens modal
+      document.getElementById('book-now').addEventListener('click', ()=> {
+        // use open-service hash pattern used by index.html to auto-open modal
+        location.href = `index.html#open-service=${encodeURIComponent(svc.id)}`;
+      });
+    }
   </script>
 </body>
 </html>
