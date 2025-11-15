@@ -8,12 +8,14 @@
   <!-- Google font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Font Awesome for nicer icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <!-- Option B: Rounded-square icon + wordmark (inline SVG) -->
       <a class="brand" href="#" aria-label="Omnifix home">
         <svg width="140" height="44" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="omnifixTitleB" class="logo-svg-inline">
           <title id="omnifixTitleB">Omnifix — Trusted home services</title>
@@ -23,25 +25,15 @@
               <stop offset="1" stop-color="#6d28d9"/>
             </linearGradient>
           </defs>
-
-          <!-- Icon -->
           <g transform="translate(12,8)">
             <rect x="0" y="0" width="56" height="56" rx="12" fill="url(#omniGradB)"/>
-            <!-- small house + wrench mark -->
             <path d="M14 30 L28 18 L42 30 V40 H32 V34 H24 V40 H14 Z" fill="white" opacity="0.96"/>
           </g>
-
-          <!-- Wordmark -->
           <g transform="translate(90,50)" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial" style="dominant-baseline:middle">
             <text x="0" y="0" font-size="28" font-weight="700" fill="#0f172a">Omnifix</text>
             <text x="0" y="22" font-size="12" fill="#6b7280">Trusted home services</text>
           </g>
         </svg>
-
-        <div class="brand-text" style="margin-left:8px">
-          <div class="logo-title">Omnifix</div>
-          <div class="logo-sub">Trusted home services</div>
-        </div>
       </a>
 
       <nav id="main-nav" class="nav">
@@ -51,7 +43,6 @@
       </nav>
 
       <div class="header-actions">
-        <!-- Login/Register or user pill inserted dynamically -->
         <button id="book-now" class="btn btn-primary">Book Now</button>
         <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">☰</button>
       </div>
@@ -64,18 +55,10 @@
         <div class="hero-left">
           <h1>Trusted professionals for every home need</h1>
           <p class="hero-sub">Book verified technicians for cleaning, repairs, installations and more. Transparent pricing, on-demand or scheduled.</p>
-
           <div class="hero-ctas">
             <a class="btn btn-primary" href="#services">Explore Services</a>
             <a class="btn btn-ghost" href="#providers">For Providers</a>
           </div>
-
-          <ul class="highlights">
-            <li><strong>300+</strong> Services</li>
-            <li><strong>5k+</strong> Bookings</li>
-            <li><strong>4.7</strong> Avg rating</li>
-            <li><strong>50+</strong> Cities</li>
-          </ul>
         </div>
 
         <div class="hero-right">
@@ -92,6 +75,12 @@
       </div>
     </section>
 
+    <!-- Category tiles -->
+    <section class="container categories-section">
+      <div id="category-tiles" class="category-tiles" aria-label="Popular categories"></div>
+    </section>
+
+    <!-- Services controls -->
     <section id="services" class="container services-section">
       <div class="service-controls">
         <div class="search">
@@ -107,12 +96,45 @@
             <option value="electrical">Electrical</option>
             <option value="carpentry">Carpentry</option>
             <option value="pest">Pest Control</option>
+            <option value="appliance">Appliance</option>
+            <option value="painting">Painting</option>
+            <option value="moving">Moving</option>
+            <option value="garden">Garden</option>
           </select>
 
           <label class="price-filter">
             <span>Max price</span>
-            <input id="price-range" type="range" min="100" max="2000" step="50" value="1500" />
-            <span id="price-value">₹1500</span>
+            <input id="price-range" type="range" min="100" max="20000" step="50" value="20000" />
+            <span id="price-value">₹20000</span>
+          </label>
+
+          <label>
+            <span>Min rating</span>
+            <select id="rating-select">
+              <option value="0">Any</option>
+              <option value="4">4★+</option>
+              <option value="4.5">4.5★+</option>
+              <option value="4.8">4.8★+</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Sort</span>
+            <select id="sort-select">
+              <option value="default">Recommended</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="rating-desc">Top rated</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Page size</span>
+            <select id="page-size">
+              <option value="6">6</option>
+              <option value="12" selected>12</option>
+              <option value="24">24</option>
+            </select>
           </label>
         </div>
       </div>
@@ -123,6 +145,10 @@
       </div>
 
       <div id="services-grid" class="grid"></div>
+
+      <div style="text-align:center;margin-top:18px">
+        <button id="load-more" class="btn btn-primary">Load more</button>
+      </div>
     </section>
 
     <section id="how" class="container how-section">
@@ -138,27 +164,6 @@
       <h3>For Providers</h3>
       <p>Join our network of verified professionals — grow your business.</p>
     </section>
-
-    <!-- My Bookings section (hidden by default) -->
-    <section id="my-bookings-section" class="container my-bookings-section hidden" aria-hidden="true">
-      <div class="section-header">
-        <h2>My Bookings</h2>
-        <div class="subtitle">Your upcoming and past bookings</div>
-      </div>
-
-      <div id="my-bookings-list" class="bookings-list">
-        <!-- bookings will be injected here -->
-      </div>
-
-      <div id="no-bookings" class="muted hidden" style="margin-top:12px">
-        You don't have any bookings yet. Book a service to get started.
-      </div>
-
-      <div style="margin-top:18px">
-        <button id="bookings-close" class="btn btn-ghost">Close</button>
-      </div>
-    </section>
-
   </main>
 
   <footer class="site-footer">
@@ -178,12 +183,12 @@
       <div id="drawer-body" class="drawer-body"></div>
       <div class="drawer-actions">
         <button id="drawer-book" class="btn btn-primary">Book this service</button>
-        <button id="drawer-fav" class="btn btn-ghost">Save</button>
+        <a id="drawer-open-page" class="btn btn-ghost" href="#">Open page</a>
       </div>
     </div>
   </aside>
 
-  <!-- Booking Modal (centered) -->
+  <!-- Booking Modal -->
   <div id="modal" class="modal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
@@ -206,53 +211,38 @@
   <div id="auth-modal" class="modal" aria-hidden="true">
     <div class="modal-content auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
       <button class="modal-close" id="auth-close" aria-label="Close auth">✕</button>
-
-      <!-- REGISTER VIEW (default visible when opened in register mode) -->
       <div id="register-view" class="auth-view">
         <h2 id="auth-title" class="auth-title">Create your account</h2>
-        <p class="auth-sub">Welcome! Please fill in the details to get started.</p>
-
         <form id="register-form" class="auth-form">
           <label class="field-label">Full name</label>
           <input type="text" id="reg-name" placeholder="Enter your full name" required />
-
           <label class="field-label">Email address</label>
           <input type="email" id="reg-email" placeholder="Enter your email address" required />
-
           <label class="field-label">Password</label>
           <div class="pw-wrap">
             <input type="password" id="reg-password" placeholder="Enter your password" required minlength="6" />
             <button type="button" class="pw-toggle" aria-label="Show password" id="reg-pw-toggle">👁️</button>
           </div>
-
           <button type="submit" class="auth-cta">Continue ▸</button>
         </form>
-
         <div class="auth-footer">
           <div class="muted small">Already have an account? <button id="switch-to-login" class="linkish">Sign in</button></div>
         </div>
-
         <div class="auth-secure muted small" style="margin-top:10px; text-align:center;">Secured locally — demo mode</div>
       </div>
 
-      <!-- LOGIN VIEW (hidden by default) -->
       <div id="login-view" class="auth-view hidden">
         <h2 class="auth-title">Welcome back</h2>
-        <p class="auth-sub">Sign in to access your bookings and faster checkout.</p>
-
         <form id="login-form" class="auth-form">
           <label class="field-label">Email address</label>
           <input type="email" id="login-email" placeholder="Enter your email address" required />
-
           <label class="field-label">Password</label>
           <div class="pw-wrap">
             <input type="password" id="login-password" placeholder="Enter your password" required />
             <button type="button" class="pw-toggle" aria-label="Show password" id="login-pw-toggle">👁️</button>
           </div>
-
           <button type="submit" class="auth-cta">Continue ▸</button>
         </form>
-
         <div class="auth-footer">
           <div class="muted small">Don't have an account? <button id="switch-to-register" class="linkish">Create one</button></div>
         </div>

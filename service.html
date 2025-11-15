@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Service — Omnifix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">Omnifix</a>
+    </div>
+  </header>
+
+  <main class="container" style="padding:36px 20px">
+    <div id="service-detail"></div>
+    <div style="margin-top:20px">
+      <a href="index.html" class="btn btn-ghost">Back to Services</a>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE = "https://omnifix-backend.onrender.com"; // replace if different
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+
+    async function load() {
+      if(!id){
+        document.getElementById('service-detail').innerText = 'No service specified';
+        return;
+      }
+      try {
+        const res = await fetch(API_BASE + '/api/services/' + id);
+        const s = await res.json();
+        if(!s || !s.title) {
+          document.getElementById('service-detail').innerText = 'Service not found';
+          return;
+        }
+        document.getElementById('service-detail').innerHTML = `
+          <div class="card-service" style="padding:20px">
+            <div style="display:flex;gap:18px;align-items:center">
+              <div style="width:96px;height:96px;border-radius:14px;background:${s.color||'#7c3aed'};display:flex;align-items:center;justify-content:center;font-size:48px">${s.icon||'🔧'}</div>
+              <div style="flex:1">
+                <h2 style="margin:0 0 6px">${s.title}</h2>
+                <div class="muted">${s.category || ''} • ₹${s.price || ''} • ${s.rating || ''} ★</div>
+                <p style="margin-top:12px">${s.desc || s.short || ''}</p>
+                <div style="margin-top:18px">
+                  <button id="book-now" class="btn btn-primary">Book now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('book-now').addEventListener('click', ()=> {
+          // open index.html and open modal — we pass service id in hash to allow opening modal automatically
+          location.href = 'index.html#open-service=' + id;
+        });
+      } catch (err) {
+        console.error(err);
+        document.getElementById('service-detail').innerText = 'Failed to load service';
+      }
+    }
+    load();
+  </script>
+</body>
+</html>
