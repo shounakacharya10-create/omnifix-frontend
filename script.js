@@ -2,6 +2,8 @@
 
 // -------- Config & API base ----------
 const API_BASE = "https://omnifix-backend.onrender.com"; // change when deployed
+// expose for console debugging
+window.API_BASE = API_BASE;
 
 // -------- Demo dataset fallback (kept for offline fallback) ----------
 let SERVICES = [
@@ -283,6 +285,32 @@ function updateHeaderAuth(){
       menu.insertBefore(node, menu.firstChild);
     }
   }
+
+  // ensure the permanent header booking button is created (if logged in)
+  try { ensureHeaderBookingsButton(); } catch(e){ /* ignore */ }
+}
+
+// Permanent header bookings button helper
+function ensureHeaderBookingsButton(){
+  const headerActions = document.querySelector('.header-actions');
+  if(!headerActions) return;
+  // remove existing duplicates
+  document.querySelectorAll('.header-bookings-btn')?.forEach(n=>n.remove());
+
+  const user = getCurrentUser();
+  if(!user) return; // only show to logged-in users
+
+  const btn = document.createElement('button');
+  btn.className = 'btn header-bookings-btn';
+  btn.style.marginRight = '8px';
+  btn.textContent = 'My Bookings';
+  btn.addEventListener('click', ()=> {
+    loadAndShowBookings();
+  });
+
+  const bookNow = document.getElementById('book-now');
+  if(bookNow) headerActions.insertBefore(btn, bookNow);
+  else headerActions.appendChild(btn);
 }
 
 // protect booking: if user not logged in, open login modal
@@ -762,6 +790,8 @@ function initHeaderAndButtons(){
   updateHeaderAuth();
   rewireBookButtons();
   rewireDetailsButtons();
+  // ensure header bookings button
+  try { ensureHeaderBookingsButton(); } catch(e){ /* ignore */ }
 }
 
 // ---------- fetch & init ----------
